@@ -1,0 +1,70 @@
+.lista-pets{
+    display: flex;
+    flex-wrap: wrap;
+    background-color: rgba(232, 245, 233, 1);
+    padding: 20px 0 20px 10px;
+}
+/* card pet */
+.lista-pets .card-pet{
+    max-width: 90%;
+    width: 382px;
+    height: 423px;
+    box-sizing: border-box;
+    border-radius: 16px;
+    font-family: 'Poppins', Arial, Helvetica, sans-serif;
+    font-weight: 400;
+    letter-spacing: 5%;
+    line-height: 2.5rem;
+    background-color: rgba(255, 255, 255, 1);
+    color: rgba(0, 0, 0, 1);
+    margin: 4px;
+}
+
+.card-pet .container-img, 
+.container-img img{
+    border-radius: 16px;
+}
+
+.lista-pets .card-pet .container-img,
+.lista-pets .card-pet .container-textos{
+    width: 370px;
+    margin: auto;
+    
+}
+.lista-pets .card-pet .container-textos{
+    margin-top: 10px;
+}
+.lista-pets .card-pet .container-img{
+    max-width: 100%;
+    height: 230px;
+    margin: auto;
+    margin-top: 8px;
+}
+
+.container-img .imgPet{
+  width: 100%;       
+  height: 240px;     /* altura fixa para o card */
+  object-fit: cover; /* imagem preenche sem distorcer */
+  object-position: top; /* Mantém o topo e corta o excesso de baixo */
+}
+
+.container-textos h2{
+    font-weight: 500;
+    font-size: 2rem; /*32px*/
+}
+
+.card-pet button{
+    display: block;
+    box-sizing: border-box;
+    width: 347px;
+    max-width: 100%;
+    height: 45px;
+    margin: auto;
+    font-family: 'Poppins', Arial, Helvetica, sans-serif;
+    font-size: 1.5rem; /*24px*/
+    color: rgba(76, 175, 80, 1);
+    background-color: rgba(232, 245, 233, 1);
+    border-radius: 20px;
+    border: none;
+    cursor: pointer;
+}
