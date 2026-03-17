@@ -1,21 +1,35 @@
 {
-  "name": "elysia",
-  "version": "1.0.50",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "bun run --watch src/index.ts"
-  },
-  "dependencies": {
-    "dotenv": "^17.3.1",
-    "drizzle-orm": "^0.45.1",
-    "elysia": "latest",
-    "pg": "^8.20.0"
-  },
-  "devDependencies": {
-    "@types/pg": "^8.18.0",
-    "bun-types": "latest",
-    "drizzle-kit": "^0.31.9",
-    "tsx": "^4.21.0"
-  },
-  "module": "src/index.js"
+	"name": "elysia",
+	"version": "1.0.50",
+	"scripts": {
+		"dev": "bun --bun --watch src/index.ts",
+		"build": "bun --bun src/index.ts",
+		"test": "bun --bun test tests",
+		"lint": "bun --bun biome check",
+		"lint:fix": "bun --bun biome check --write",
+		"lint:fix:unsafe": "bun --bun biome check --write --unsafe",
+		"format": "bun --bun biome format --write",
+		"db:generate": "bun --bun drizzle-kit generate",
+		"db:generate:client": "bun --bun drizzle-kit generate && drizzle-kit up",
+		"db:migrate": "bun --bun drizzle-kit migrate",
+		"db:studio": "bun --bun drizzle-kit studio",
+		"db:seed": "bun --bun run src/database/seed.ts",
+		"db:push": "bun --bun drizzle-kit push",
+		"auth:generate": "bunx --bun auth@latest generate"
+	},
+	"dependencies": {
+		"@better-auth/drizzle-adapter": "^1.5.5",
+		"better-auth": "^1.5.5",
+		"drizzle-orm": "^0.45.1",
+		"elysia": "latest"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "^2.4.7",
+		"@types/bun": "^1.3.10",
+		"bun-types": "latest",
+		"drizzle-kit": "^0.31.9",
+		"tsx": "^4.21.0",
+		"typescript": "^5.9.3"
+	},
+	"module": "src/index.js"
 }
