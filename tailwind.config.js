@@ -7,14 +7,15 @@ export default {
   theme: {
     extend: {
       colors: {
-        primary: "#27607B",  // azul
-        secondary: "#FF7A00", // laranja
-        accent: "#E5B300", // amarelo
+        primary: "#27607B",
+        secondary: "#FF7A00",
+        accent: "#E5B300",
         white: "#FFFFFF",
-    },
-    fontFamily: {
+      },
+      fontFamily: {
         poppins: ['Poppins', 'sans-serif'],
       },
-  },
+    },  
+  },    
   plugins: [],
 }
