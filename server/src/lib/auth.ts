@@ -8,7 +8,7 @@ export const auth = betterAuth({
 	}),
 	advanced: {
 		database: {
-			generateId: false, // "serial" for auto-incrementing numeric IDs
+			generateId: "uuid" // "serial" for auto-incrementing numeric IDs
 		},
 	},
 });
