@@ -29,7 +29,7 @@ export const petRepository = {
 			);
 	},
 	getPetById: async (id: string) => {
-		const result = await db
+		return await db
 			.select({
 				pet: pet,
 				ong: ong,
@@ -37,28 +37,20 @@ export const petRepository = {
 			.from(pet)
 			.innerJoin(ong, eq(pet.ongId, ong.id))
 			.where(eq(pet.id, id));
-		return result[0];
 	},
 	createPet: async (request: PetRequest, ongId: string) => {
-		const result = await db
+		return await db
 			.insert(pet)
 			.values({
 				...request,
 				ongId,
 			})
 			.returning();
-		return result[0];
 	},
 	updatePet: async (id: string, request: Partial<PetRequest>) => {
-		const result = await db
-			.update(pet)
-			.set(request)
-			.where(eq(pet.id, id))
-			.returning();
-		return result[0];
+		return await db.update(pet).set(request).where(eq(pet.id, id)).returning();
 	},
 	deletePet: async (id: string) => {
-		const result = await db.delete(pet).where(eq(pet.id, id)).returning();
-		return result.length !== 0;
+		return await db.delete(pet).where(eq(pet.id, id)).returning();
 	},
 };

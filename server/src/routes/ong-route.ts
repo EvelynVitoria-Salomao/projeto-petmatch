@@ -23,9 +23,16 @@ const ongRoutes = new Elysia({ prefix: "/ongs" })
 	.get("/:id", async ({ params: { id } }) => ongService.getOngById(id), {
 		params: t.Object({ id: t.String({ format: "uuid" }) }),
 	})
-	.post("/", async ({ body }) => ongService.createOng(body), {
-		body: t.Object(bodyParse),
-	})
+	.post(
+		"/",
+		async ({ body, status }) => {
+			const result = await ongService.createOng(body);
+			return status(201, result);
+		},
+		{
+			body: t.Object(bodyParse),
+		},
+	)
 	.put(
 		"/:id",
 		async ({ params: { id }, body }) => ongService.updateOng(id, body),

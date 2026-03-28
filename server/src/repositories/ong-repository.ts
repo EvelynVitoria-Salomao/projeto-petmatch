@@ -15,8 +15,7 @@ export const ongRepository = {
 		return result[0];
 	},
 	getOngById: async (id: string) => {
-		const result = await db.select().from(ong).where(eq(ong.id, id));
-		return result[0];
+		return await db.select().from(ong).where(eq(ong.id, id));
 	},
 	createOng: async (request: OngRequest, userId: string) => {
 		return await db

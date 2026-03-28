@@ -32,9 +32,16 @@ const petRoutes = new Elysia({ prefix: "/pets" })
 	.get("/:id", async ({ params: { id } }) => petService.getPetById(id), {
 		params: t.Object({ id: t.String({ format: "uuid" }) }),
 	})
-	.post("/", async ({ body }) => petService.createPet(body), {
-		body: t.Object(bodyParse),
-	})
+	.post(
+		"/",
+		async ({ body, status }) => {
+			const result = await petService.createPet(body);
+			return status(201, result);
+		},
+		{
+			body: t.Object(bodyParse),
+		},
+	)
 	.put(
 		"/:id",
 		async ({ params: { id }, body }) => petService.updatePet(id, body),
@@ -43,8 +50,15 @@ const petRoutes = new Elysia({ prefix: "/pets" })
 			body: t.Partial(t.Object(bodyParse)),
 		},
 	)
-	.delete("/:id", async ({ params: { id } }) => petService.deletePet(id), {
-		params: t.Object({ id: t.String({ format: "uuid" }) }),
-	});
+	.delete(
+		"/:id",
+		async ({ params: { id }, status }) => {
+			await petService.deletePet(id);
+			return status(204);
+		},
+		{
+			params: t.Object({ id: t.String({ format: "uuid" }) }),
+		},
+	);
 
 export default petRoutes;
