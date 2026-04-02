@@ -1,14 +1,12 @@
-import './App.css'
+import "./App.css";
+import About from "./components/About";
 
 function App() {
-
   return (
-    <div className="h-screen flex items-center justify-center bg-black">
-      <h1 className="text-white text-4xl">
-        Projeto funcionando 🚀
-      </h1>
-    </div>
-  )
+    <main>
+      <About />
+    </main>
+  );
 }
 
-export default App
+export default App;
