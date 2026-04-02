@@ -1,5 +1,4 @@
 import { ongRepository } from "@/repositories/ong-repository";
-import { userRepository } from "@/repositories/user-repository";
 import { DatabaseError, EntityNotFound } from "@/types/custom-errors";
 import type { OngRequest } from "@/types/ong-types";
 
@@ -11,10 +10,8 @@ export const ongService = {
 		}
 		return result[0];
 	},
-	createOng: async (request: OngRequest) => {
-		// obter username a partir do token, depois buscar user ID
-		const user = await userRepository.getOneUser();
-		const result = await ongRepository.createOng(request, user.id);
+	createOng: async (request: OngRequest, userId: string) => {
+		const result = await ongRepository.createOng(request, userId);
 		if (result.length === 0) {
 			throw new DatabaseError("Erro ao cadastrar ong");
 		}

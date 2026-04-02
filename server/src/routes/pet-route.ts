@@ -1,4 +1,5 @@
 import { Elysia, t } from "elysia";
+import { betterAuth } from "@/routes/route-security";
 import { petService } from "@/services/pet-service";
 import { EspecieEnum, PorteEnum, SexoEnum } from "@/types/pet-types";
 
@@ -25,7 +26,8 @@ const bodyParse = {
 	urlImagem: t.String(),
 };
 
-const petRoutes = new Elysia({ prefix: "/pets" })
+const petRoutes = new Elysia({ prefix: "/pets", tags: ["Pets"] })
+	.use(betterAuth)
 	.get("/", async ({ query }) => petService.getPets(query), {
 		query: t.Object(queryParamsParse),
 	})
@@ -34,12 +36,13 @@ const petRoutes = new Elysia({ prefix: "/pets" })
 	})
 	.post(
 		"/",
-		async ({ body, status }) => {
-			const result = await petService.createPet(body);
+		async ({ body, status, user }) => {
+			const result = await petService.createPet(body, user.id);
 			return status(201, result);
 		},
 		{
 			body: t.Object(bodyParse),
+			auth: true,
 		},
 	)
 	.put(
@@ -48,6 +51,7 @@ const petRoutes = new Elysia({ prefix: "/pets" })
 		{
 			params: t.Object({ id: t.String({ format: "uuid" }) }),
 			body: t.Partial(t.Object(bodyParse)),
+			auth: true,
 		},
 	)
 	.delete(
@@ -58,6 +62,7 @@ const petRoutes = new Elysia({ prefix: "/pets" })
 		},
 		{
 			params: t.Object({ id: t.String({ format: "uuid" }) }),
+			auth: true,
 		},
 	);
 

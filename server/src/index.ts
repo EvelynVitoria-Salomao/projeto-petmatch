@@ -1,7 +1,10 @@
+import openapi from "@elysiajs/openapi";
 import { Elysia } from "elysia";
 import ongRoutes from "@/routes/ong-route";
 import petRoutes from "@/routes/pet-route";
+import { betterAuth } from "@/routes/route-security";
 import { DatabaseError, EntityNotFound } from "@/types/custom-errors";
+import { OpenAPI } from "./lib/auth-openapi";
 
 const app = new Elysia()
 	.error({
@@ -16,6 +19,23 @@ const app = new Elysia()
 				return status(500, error.message);
 		}
 	})
+	.use(
+		openapi({
+			documentation: {
+				components: await OpenAPI.components,
+				paths: await OpenAPI.getPaths(),
+				tags: [
+					{
+						name: "Pets",
+					},
+					{
+						name: "Ongs",
+					},
+				],
+			},
+		}),
+	)
+	.use(betterAuth)
 	.group("/api", (api) => {
 		api.use(petRoutes);
 		api.use(ongRoutes);

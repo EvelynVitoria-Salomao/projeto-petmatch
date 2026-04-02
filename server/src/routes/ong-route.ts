@@ -1,4 +1,5 @@
 import { Elysia, t } from "elysia";
+import { betterAuth } from "@/routes/route-security";
 import { ongService } from "@/services/ong-service";
 
 const bodyParse = {
@@ -19,18 +20,21 @@ const bodyParse = {
 	numero: t.Numeric(),
 };
 
-const ongRoutes = new Elysia({ prefix: "/ongs" })
+const ongRoutes = new Elysia({ prefix: "/ongs", tags: ["Ongs"] })
+	.use(betterAuth)
 	.get("/:id", async ({ params: { id } }) => ongService.getOngById(id), {
 		params: t.Object({ id: t.String({ format: "uuid" }) }),
+		auth: true,
 	})
 	.post(
 		"/",
-		async ({ body, status }) => {
-			const result = await ongService.createOng(body);
+		async ({ body, status, user }) => {
+			const result = await ongService.createOng(body, user.id);
 			return status(201, result);
 		},
 		{
 			body: t.Object(bodyParse),
+			auth: true,
 		},
 	)
 	.put(
@@ -39,6 +43,7 @@ const ongRoutes = new Elysia({ prefix: "/ongs" })
 		{
 			params: t.Object({ id: t.String({ format: "uuid" }) }),
 			body: t.Partial(t.Object(bodyParse)),
+			auth: true,
 		},
 	);
 

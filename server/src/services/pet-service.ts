@@ -14,15 +14,12 @@ export const petService = {
 		}
 		return result[0];
 	},
-	createPet: async (request: PetRequest) => {
-		/*
-		temporario: ong aleatoria
-		pendente: receber o token do usuário logado, obter o username a partir do token
-			buscar o ID da ong do usuario
-			select ong.id from ong join user where user.username = ?
-		*/
-		const ong = await ongRepository.getOneOng();
-		const result = await petRepository.createPet(request, ong.id);
+	createPet: async (request: PetRequest, userId: string) => {
+		const ongResult = await ongRepository.getOngByUserId(userId);
+		if (ongResult.length === 0) {
+			throw new EntityNotFound("Nenhuma ONG encontrada para o usuário atual");
+		}
+		const result = await petRepository.createPet(request, ongResult[0].ong.id);
 		if (result.length === 0) {
 			throw new DatabaseError("Erro ao cadastrar pet");
 		}

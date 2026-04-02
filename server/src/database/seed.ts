@@ -1,5 +1,6 @@
+import { hashPassword } from "better-auth/crypto";
 import { db } from "@/database/connection";
-import { ong, pet, user } from "@/database/schema";
+import { account, ong, pet, user } from "@/database/schema";
 
 function mapEspecieToEnum(value: string): "Cachorro" | "Gato" | "Outro" {
 	if (value === "Cão") return "Cachorro";
@@ -14,6 +15,7 @@ export async function seed() {
 	try {
 		await db.delete(pet);
 		await db.delete(ong);
+		await db.delete(account);
 		await db.delete(user);
 		console.log("Limpando dados existentes.\n\n");
 	} catch (error) {
@@ -21,7 +23,7 @@ export async function seed() {
 	}
 
 	// Insert Users
-	const [user1, user2, _user3] = await db
+	const [user1, user2] = await db
 		.insert(user)
 		.values([
 			{
@@ -42,15 +44,31 @@ export async function seed() {
 				createdAt: now,
 				updatedAt: now,
 			},
+		])
+		.returning();
+
+	// Insert User Accounts
+	const [_account1, _account2] = await db
+		.insert(account)
+		.values([
 			{
 				id: crypto.randomUUID(),
-				name: "Roberto",
-				email: "roberto@petopia.org.br",
-				emailVerified: true,
-				image: null,
+				accountId: user1.id,
+				userId: user1.id,
+				providerId: "credential",
+				password: await hashPassword("123456789"),
 				createdAt: now,
 				updatedAt: now,
-			}
+			},
+			{
+				id: crypto.randomUUID(),
+				accountId: user2.id,
+				userId: user2.id,
+				providerId: "credential",
+				password: await hashPassword("123456789"),
+				createdAt: now,
+				updatedAt: now,
+			},
 		])
 		.returning();
 
@@ -66,7 +84,8 @@ export async function seed() {
 				whatsapp: "551133445566",
 				email: "contato@ecovida.org.br",
 				instagram: "@ecovida",
-				urlImagem: "https://images.unsplash.com/photo-1576201836106-db1758fd1c97",
+				urlImagem:
+					"https://images.unsplash.com/photo-1576201836106-db1758fd1c97",
 				cep: "01310100",
 				uf: "SP",
 				cidade: "São Paulo",
