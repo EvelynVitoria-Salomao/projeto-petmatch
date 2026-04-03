@@ -24,7 +24,6 @@ const ongRoutes = new Elysia({ prefix: "/ongs", tags: ["Ongs"] })
 	.use(betterAuth)
 	.get("/:id", async ({ params: { id } }) => ongService.getOngById(id), {
 		params: t.Object({ id: t.String({ format: "uuid" }) }),
-		auth: true,
 	})
 	.post(
 		"/",
@@ -39,7 +38,8 @@ const ongRoutes = new Elysia({ prefix: "/ongs", tags: ["Ongs"] })
 	)
 	.put(
 		"/:id",
-		async ({ params: { id }, body }) => ongService.updateOng(id, body),
+		async ({ params: { id }, body, user }) =>
+			ongService.updateOng(id, user.id, body),
 		{
 			params: t.Object({ id: t.String({ format: "uuid" }) }),
 			body: t.Partial(t.Object(bodyParse)),

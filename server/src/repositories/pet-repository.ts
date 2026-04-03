@@ -53,4 +53,13 @@ export const petRepository = {
 	deletePet: async (id: string) => {
 		return await db.delete(pet).where(eq(pet.id, id)).returning();
 	},
+	getPetAndOngIds: async (petId: string) => {
+		return await db
+			.select({
+				petId: pet.id,
+				ongId: pet.ongId,
+			})
+			.from(pet)
+			.where(eq(pet.id, petId));
+	},
 };

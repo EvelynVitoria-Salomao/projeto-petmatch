@@ -1,5 +1,9 @@
 import { ongRepository } from "@/repositories/ong-repository";
-import { DatabaseError, EntityNotFound } from "@/types/custom-errors";
+import {
+	DatabaseError,
+	EntityNotFound,
+	ForbiddenError,
+} from "@/types/custom-errors";
 import type { OngRequest } from "@/types/ong-types";
 
 export const ongService = {
@@ -11,17 +15,30 @@ export const ongService = {
 		return result[0];
 	},
 	createOng: async (request: OngRequest, userId: string) => {
-		const result = await ongRepository.createOng(request, userId);
-		if (result.length === 0) {
-			throw new DatabaseError("Erro ao cadastrar ong");
+		try {
+			const result = await ongRepository.createOng(request, userId);
+			return result[0];
+		} catch (error) {
+			throw new DatabaseError("Erro inesperado ao criar ONG");
 		}
-		return result[0];
 	},
-	updateOng: async (id: string, request: Partial<OngRequest>) => {
-		const result = await ongRepository.updateOng(id, request);
-		if (result.length === 0) {
-			throw new DatabaseError("Erro ao atualizar ong");
+	updateOng: async (
+		ongId: string,
+		userId: string,
+		request: Partial<OngRequest>,
+	) => {
+		const ongResult = await ongRepository.getOngAndUserIds(userId);
+		if (ongResult.length === 0) {
+			throw new EntityNotFound("Usuário atual não possui ONG cadastrada");
 		}
-		return result[0];
+		if (ongResult[0].ongId !== ongId) {
+			throw new ForbiddenError("ONG informada não pertence ao usuário atual");
+		}
+		try {
+			const updateResult = await ongRepository.updateOng(userId, request);
+			return updateResult[0];
+		} catch (error) {
+			throw new DatabaseError("Erro inesperado ao atualizar ONG");
+		}
 	},
 };

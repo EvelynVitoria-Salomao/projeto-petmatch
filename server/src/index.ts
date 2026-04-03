@@ -3,13 +3,18 @@ import { Elysia } from "elysia";
 import ongRoutes from "@/routes/ong-route";
 import petRoutes from "@/routes/pet-route";
 import { betterAuth } from "@/routes/route-security";
-import { DatabaseError, EntityNotFound } from "@/types/custom-errors";
+import {
+	DatabaseError,
+	EntityNotFound,
+	ForbiddenError,
+} from "@/types/custom-errors";
 import { OpenAPI } from "./lib/auth-openapi";
 
 const app = new Elysia()
 	.error({
 		DATABASE_ERROR: DatabaseError,
 		ENTITY_NOT_FOUND: EntityNotFound,
+		FORBIDDEN_ERROR: ForbiddenError,
 	})
 	.onError(({ code, error, status }) => {
 		switch (code) {
@@ -17,6 +22,8 @@ const app = new Elysia()
 				return status(404, error.message);
 			case "DATABASE_ERROR":
 				return status(500, error.message);
+			case "FORBIDDEN_ERROR":
+				return status(403, error.message);
 		}
 	})
 	.use(
