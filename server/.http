@@ -1,6 +1,94 @@
+@baseUrl = http://localhost:3000/api
+@authToken = Bearer INSIRA_SEU_TOKEN_AQUI
 
-###  
-GET http://localhost:3000/api/pets
+# IDs de exemplo
+@petId = 98ec2f6e-ec0a-4b26-b270-9dab06c3f522
+@ongId = 8b9d32ea-8dd3-4522-a03c-d4958a35f8bf
 
-### 
-GET http://localhost:3000/api/pets/98ec2f6e-ec0a-4b26-b270-9dab06c3f522
+### =========================================================================
+### PETS
+### =========================================================================
+
+### Listar todos os Pets
+GET {{baseUrl}}/pets
+
+### Listar Pets com filtros
+GET {{baseUrl}}/pets?especie=Cachorro&porte=M
+
+### Buscar Pet por ID
+GET {{baseUrl}}/pets/{{petId}}
+
+### Criar novo Pet (Auth requerido)
+POST {{baseUrl}}/pets
+Content-Type: application/json
+Authorization: {{authToken}}
+
+{
+  "nome": "Bolinha",
+  "especie": "Cachorro",
+  "raca": "SRD",
+  "sexo": "M",
+  "porte": "M",
+  "dataNascimento": "2022-05-10T00:00:00Z",
+  "descricao": "Cachorro dócil.",
+  "urlImagem": "https://images.unsplash.com/photo-1543466835-00a7907e9de1"
+}
+
+### Atualizar Pet (Auth requerido)
+PUT {{baseUrl}}/pets/{{petId}}
+Content-Type: application/json
+Authorization: {{authToken}}
+
+{
+  "porte": "G",
+  "descricao": "Cachorro dócil, vacinado."
+}
+
+### Deletar Pet (Auth requerido)
+DELETE {{baseUrl}}/pets/{{petId}}
+Authorization: {{authToken}}
+
+### =========================================================================
+### ONGS
+### =========================================================================
+
+### Listar todas as ONGs
+GET {{baseUrl}}/ongs
+
+### Listar ONGs com filtros
+GET {{baseUrl}}/ongs?cidade=São%20Paulo
+
+### Buscar ONG por ID (Auth requerido)
+GET {{baseUrl}}/ongs/{{ongId}}
+Authorization: {{authToken}}
+
+### Criar ONG (Auth requerido)
+POST {{baseUrl}}/ongs
+Content-Type: application/json
+Authorization: {{authToken}}
+
+{
+  "cnpj": "12345678000199",
+  "razaoSocial": "Associação de Proteção",
+  "nomeFantasia": "Amigos",
+  "telefone": "11987654321",
+  "whatsapp": "11987654321",
+  "email": "contato@amigos.org",
+  "instagram": "@amigos",
+  "urlImagem": "https://url.com",
+  "cep": "01001000",
+  "uf": "SP",
+  "cidade": "São Paulo",
+  "bairro": "Centro",
+  "logradouro": "Rua das Flores",
+  "numero": 123
+}
+
+### Atualizar ONG (Auth requerido)
+PUT {{baseUrl}}/ongs/{{ongId}}
+Content-Type: application/json
+Authorization: {{authToken}}
+
+{
+  "telefone": "11999998888"
+}

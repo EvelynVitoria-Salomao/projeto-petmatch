@@ -4,7 +4,7 @@ import {
 	EntityNotFound,
 	ForbiddenError,
 } from "@/types/custom-errors";
-import type { OngRequest } from "@/types/ong-types";
+import type { OngQueryParams, OngRequest } from "@/types/ong-types";
 
 export const ongService = {
 	getOngById: async (id: string) => {
@@ -40,5 +40,8 @@ export const ongService = {
 		} catch (error) {
 			throw new DatabaseError("Erro inesperado ao atualizar ONG");
 		}
+	},
+	getOngs: async (params: OngQueryParams) => {
+		return ongRepository.getOngs(params);
 	},
 };

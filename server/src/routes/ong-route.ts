@@ -20,6 +20,16 @@ const bodyParse = {
 	numero: t.Numeric(),
 };
 
+const queryParamsParse = {
+	cnpj: t.Optional(t.String()),
+	razaoSocial: t.Optional(t.String()),
+	nomeFantasia: t.Optional(t.String()),
+	telefone: t.Optional(t.String()),
+	whatsapp: t.Optional(t.String()),
+	email: t.Optional(t.String()),
+	site: t.Optional(t.String()),
+};
+
 const ongRoutes = new Elysia({ prefix: "/ongs", tags: ["Ongs"] })
 	.use(betterAuth)
 	.get("/:id", async ({ params: { id } }) => ongService.getOngById(id), {
@@ -45,6 +55,9 @@ const ongRoutes = new Elysia({ prefix: "/ongs", tags: ["Ongs"] })
 			body: t.Partial(t.Object(bodyParse)),
 			auth: true,
 		},
-	);
+	)
+	.get("/", async ({ query }) => ongService.getOngs(query), {
+		query: t.Object(queryParamsParse),
+	})
 
 export default ongRoutes;

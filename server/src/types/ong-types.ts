@@ -15,3 +15,13 @@ export type OngRequest = {
 	logradouro: string;
 	numero: number;
 };
+
+export type OngQueryParams = {
+	cnpj?: string;
+	razaoSocial?: string;
+	nomeFantasia?: string;
+	telefone?: string;
+	whatsapp?: string;
+	email?: string;
+	site?: string;
+};

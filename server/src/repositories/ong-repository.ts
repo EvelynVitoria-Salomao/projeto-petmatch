@@ -1,7 +1,7 @@
-import { eq } from "drizzle-orm";
+import { and, eq, ilike, ne } from "drizzle-orm";
 import { db } from "@/database/connection";
 import { ong, user } from "@/database/schema";
-import type { OngRequest } from "@/types/ong-types";
+import type { OngQueryParams, OngRequest } from "@/types/ong-types";
 
 export const ongRepository = {
 	getOngById: async (id: string) => {
@@ -33,4 +33,28 @@ export const ongRepository = {
 			.innerJoin(user, eq(ong.userId, user.id))
 			.where(eq(ong.userId, userId));
 	},
+	getOngs: async (params: OngQueryParams) => {
+		return await db
+			.select({
+				id: ong.id,
+				nomeFantasia: ong.nomeFantasia,
+				urlImagem: ong.urlImagem,
+				cidade: ong.cidade,
+				estado: ong.uf,
+				telefone: ong.telefone,
+				email: ong.email,
+			})
+			.from(ong)
+			.where(
+				and(
+					params.cnpj ? eq(ong.cnpj, params.cnpj) : undefined,
+					params.razaoSocial ? eq(ong.razaoSocial, params.razaoSocial) : undefined,
+					params.nomeFantasia ? ilike(ong.nomeFantasia, `%${params.nomeFantasia}%`) : undefined,
+					params.telefone ? eq(ong.telefone, params.telefone) : undefined,
+					params.whatsapp ? eq(ong.whatsapp, params.whatsapp) : undefined,
+					params.email ? eq(ong.email, params.email) : undefined,
+					params.site ? eq(ong.site, params.site) : undefined,
+				),
+			);
+	}
 };
