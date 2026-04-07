@@ -55,9 +55,6 @@ export const petService = {
 		} catch {
 			throw new DatabaseError("Erro inesperado ao atualizar pet");
 		}
-		if (updateResult.length === 0) {
-			throw new EntityNotFound("Pet não encontrado");
-		}
 		return updateResult[0];
 	},
 	deletePet: async (id: string, userId: string) => {
