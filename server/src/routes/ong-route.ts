@@ -1,5 +1,5 @@
 import { Elysia, t } from "elysia";
-import { betterAuth } from "@/routes/route-security";
+import { betterAuthContext } from "@/routes/route-security";
 import { ongService } from "@/services/ong-service";
 
 const bodyParse = {
@@ -31,7 +31,7 @@ const queryParamsParse = {
 };
 
 const ongRoutes = new Elysia({ prefix: "/ongs", tags: ["Ongs"] })
-	.use(betterAuth)
+	.use(betterAuthContext)
 	.get("/:id", async ({ params: { id } }) => ongService.getOngById(id), {
 		params: t.Object({ id: t.String({ format: "uuid" }) }),
 	})

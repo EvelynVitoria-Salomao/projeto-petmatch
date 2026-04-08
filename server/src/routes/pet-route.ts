@@ -1,5 +1,5 @@
 import { Elysia, t } from "elysia";
-import { betterAuth } from "@/routes/route-security";
+import { betterAuthContext } from "@/routes/route-security";
 import { petService } from "@/services/pet-service";
 import { EspecieEnum, PorteEnum, SexoEnum } from "@/types/pet-types";
 
@@ -27,7 +27,7 @@ const bodyParse = {
 };
 
 const petRoutes = new Elysia({ prefix: "/pets", tags: ["Pets"] })
-	.use(betterAuth)
+	.use(betterAuthContext)
 	.get("/", async ({ query }) => petService.getPets(query), {
 		query: t.Object(queryParamsParse),
 	})

@@ -2,7 +2,7 @@ import openapi from "@elysiajs/openapi";
 import { Elysia } from "elysia";
 import ongRoutes from "@/routes/ong-route";
 import petRoutes from "@/routes/pet-route";
-import { betterAuth } from "@/routes/route-security";
+import { betterAuthRoutes } from "@/routes/route-security";
 import {
 	DatabaseError,
 	EntityNotFound,
@@ -42,7 +42,7 @@ const app = new Elysia()
 			},
 		}),
 	)
-	.use(betterAuth)
+	.use(betterAuthRoutes)
 	.group("/api", (api) => {
 		api.use(petRoutes);
 		api.use(ongRoutes);

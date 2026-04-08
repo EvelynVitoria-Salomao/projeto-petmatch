@@ -1,4 +1,4 @@
-import { and, eq, ilike, ne } from "drizzle-orm";
+import { and, eq, ilike } from "drizzle-orm";
 import { db } from "@/database/connection";
 import { ong, user } from "@/database/schema";
 import type { OngQueryParams, OngRequest } from "@/types/ong-types";
