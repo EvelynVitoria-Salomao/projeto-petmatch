@@ -132,7 +132,7 @@ docker compose down -v
 
 - [ ] Cadastro e autenticação completos no frontend
 - [ ] Tela de detalhes de pet com contato rápido da ONG
-- [ ] Filtros avançados por cidade/porte/especie
+- [ ] Filtros avançados por cidade/porte/espécie
 - [ ] Dashboard administrativo para ONGs
 - [ ] Testes automatizados para fluxos principais
 
