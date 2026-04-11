@@ -47,7 +47,7 @@ src/
 │   └── PreviewPetList.jsx     # Lista de preview de pets
 └── pages/                     # Páginas da aplicação
     ├── Login.jsx              # Página de login
-    ├── OnRegister.jsx         # Página de registro de ONG
+    ├── OnRegister.jsx        # Página de registro de ONG
     └── PetList.jsx            # Página de listagem de pets
 
 public/                        # Assets estáticos
@@ -57,7 +57,7 @@ public/                        # Assets estáticos
 
 ### Pré-requisitos
 
-- **Node.js** versão 16+ ou **Bun** instalados
+- **Node.js** versão 20.19.0+ ou 22.12.0+ (requerido pelo Vite 8) ou **Bun** instalados
 - **npm** ou **bun** como gerenciador de pacotes
 - **Backend** rodando em `http://localhost:3000`
 
@@ -70,15 +70,7 @@ npm install
 bun install
 ```
 
-### 2. Configurar variáveis de ambiente
-
-Crie um arquivo `.env.local` na raiz da pasta `web`:
-
-```env
-VITE_API_URL=http://localhost:3000
-```
-
-### 3. Executar em desenvolvimento
+### 2. Executar em desenvolvimento
 
 ```bash
 npm run dev
@@ -88,7 +80,7 @@ bun run dev
 
 O navegador abrirá automaticamente em `http://localhost:5173`.
 
-### 4. Parar o servidor
+### 3. Parar o servidor
 
 Pressione `Ctrl + C` no terminal.
 
@@ -114,15 +106,20 @@ Seção inicial com call-to-action e apresentação visual do projeto.
 <HeroSection />
 ```
 
-### PetCard
-Card exibindo informações resumidas de um pet (foto, nome, raça, idade).
+### CardPet
+Card exibindo informações resumidas de um pet (foto, nome, localização).
 
 **Props:**
-- `pet` (object): Dados do pet (id, name, species, breed, age, image)
-- `onClick` (function): Callback para abrir modal de detalhes
+- `img` (string): URL da imagem do pet
+- `nome` (string): Nome do pet
+- `localizacao` (string): Localização do pet
+
+**Uso:**
 
 ```jsx
-<PetCard pet={petData} onClick={() => setSelectedPet(petData)} />
+import CardPet from './components/PetCard';
+
+<CardPet img={petImage} nome="Rex" localizacao="São Paulo, SP" />
 ```
 
 ### ModalPet
@@ -193,15 +190,7 @@ Página principal com listagem de todos os pets disponíveis.
 
 ## Variáveis de ambiente
 
-Crie um arquivo `.env.local` com as seguintes variáveis:
-
-```env
-# URL da API backend
-VITE_API_URL=http://localhost:3000
-
-# Ambiente
-VITE_ENV=development
-```
+Atualmente o frontend não usa arquivos `.env` de configuração. As URLs de API estão configuradas no código-fonte.
 
 ## Build e deploy
 

@@ -8,6 +8,7 @@ API backend do PetMatch & Care desenvolvida com Elysia, Bun, Drizzle ORM e Bette
 - [Tecnologias](#tecnologias)
 - [Estrutura do projeto](#estrutura-do-projeto)
 - [Como executar](#como-executar)
+- [Testes](#testes)
 - [Endpoints](#endpoints)
 - [Variáveis de ambiente](#variáveis-de-ambiente)
 - [Migrations e banco de dados](#migrations-e-banco-de-dados)
@@ -15,7 +16,7 @@ API backend do PetMatch & Care desenvolvida com Elysia, Bun, Drizzle ORM e Bette
 
 ## Sobre o projeto
 
-O backend do PetMatch & Care fornece uma API RESTful completa para gerenciamento de pets e ONGs. Implementa autenticação JWT, validação de dados, tratamento seguro de rotas protegidas e integração com PostgreSQL via Drizzle ORM.
+O backend do PetMatch & Care fornece uma API RESTful completa para gerenciamento de pets e ONGs. Implementa autenticação com Better Auth (sessões e cookies), validação de dados, tratamento seguro de rotas protegidas e integração com PostgreSQL via Drizzle ORM.
 
 ## Tecnologias
 
@@ -54,7 +55,12 @@ src/
     ├── ong-types.ts
     └── pet-types.ts
 
-tests/                         # Testes automatizados
+tests/
+├── setup.ts                   # Setup global do bun test
+├── unit/                      # Testes unitários (services)
+└── integration/               # Testes de integração (rotas Elysia)
+
+bunfig.toml                    # Configuração do test runner (root/preload)
 ```
 
 ## Como executar
@@ -87,7 +93,17 @@ Configure as variáveis conforme necessário (veja [Variáveis de ambiente](#var
 docker compose up -d
 ```
 
-Isso iniciará um container PostgreSQL com as migrations aplicadas automaticamente.
+Isso iniciará um container PostgreSQL. Em seguida, execute as migrations:
+
+```bash
+bun run db:migrate
+```
+
+Opcionalmente, popule dados iniciais:
+
+```bash
+bun run db:seed
+```
 
 ### 4. Executar o servidor em desenvolvimento
 
@@ -96,6 +112,35 @@ bun dev
 ```
 
 O servidor estará disponível em `http://localhost:3000`.
+
+## Testes
+
+O projeto usa o test runner nativo do Bun com configuração em `bunfig.toml`:
+
+```toml
+[test]
+root = "./tests"
+preload = ["./tests/setup.ts"]
+```
+
+Scripts disponíveis:
+
+```bash
+# Suíte completa
+bun test
+
+# Somente unitários
+bun run test:unit
+
+# Somente integração
+bun run test:integration
+
+# Watch mode
+bun run test:watch
+
+# Cobertura
+bun run test:coverage
+```
 
 ### 5. Parar os serviços
 
@@ -127,7 +172,7 @@ docker compose down -v
 |--------|------|-----------|--------------|
 | GET | `/api/ongs` | Lista todas as ONGs | ❌ |
 | GET | `/api/ongs/{id}` | Detalha uma ONG específica | ❌ |
-| POST | `/api/ongs` | Cria uma nova ONG | ❌ |
+| POST | `/api/ongs` | Cria uma nova ONG | ✅ ONG |
 | PUT | `/api/ongs/{id}` | Atualiza uma ONG | ✅ ONG |
 
 ### Autenticação
@@ -137,7 +182,7 @@ docker compose down -v
 | POST | `/api/auth/sign-up` | Registrar nova ONG |
 | POST | `/api/auth/sign-in` | Fazer login |
 | POST | `/api/auth/sign-out` | Fazer logout |
-| GET | `/api/auth/me` | Dados do usuário autenticado |
+| GET | `/api/auth/get-session` | Sessão do usuário autenticado |
 
 ## Variáveis de ambiente
 
@@ -145,20 +190,11 @@ Crie um arquivo `.env` com as seguintes variáveis:
 
 ```env
 # Database
-DATABASE_URL=postgresql://petmatch:password@localhost:5432/petmatch
+DATABASE_URL=postgresql://postgres:123456@localhost:5432/db_petmatch
 
 # Better Auth
 BETTER_AUTH_SECRET=your_secret_key_here
 BETTER_AUTH_URL=http://localhost:3000
-
-# JWT (se aplicável)
-JWT_SECRET=your_jwt_secret_here
-
-# CORS
-CORS_ORIGIN=http://localhost:5173
-
-# Node Environment
-NODE_ENV=development
 ```
 
 Veja `.env.example` para mais detalhes.
@@ -167,30 +203,41 @@ Veja `.env.example` para mais detalhes.
 
 ### Executar migrations
 
-As migrations são executadas automaticamente ao iniciar o container Docker. Para executar manualmente:
+Para executar migrations manualmente:
 
 ```bash
-bun run migrate
+bun run db:migrate
 ```
 
 ### Criar nova migration
 
 ```bash
-bun run drizzle-kit generate
+bun run db:generate
 ```
 
 Após isso, revise o arquivo gerado em `src/database/migrations/` e execute:
 
 ```bash
-bun run migrate
+bun run db:migrate
+```
+
+### Outros comandos úteis de banco
+
+```bash
+# Sincronizar schema (sem migration)
+bun run db:push
+
+# Abrir Drizzle Studio
+bun run db:studio
 ```
 
 ## Autenticação
 
-O projeto utiliza **Better Auth** para gerenciar autenticação, sessões e tokens JWT. 
+O projeto utiliza **Better Auth** para gerenciar autenticação via sessões e cookies. 
 
-- Rotas protegidas verificam tokens JWT automaticamente
-- Sessões são gerenciadas via cookies seguros
+- Sessões são gerenciadas automaticamente via cookies seguros
+- Rotas protegidas verificam a sessão do usuário autenticado
 - Integrações com OAuth estão configuradas em `src/lib/auth.ts`
+- Para adicionar OAuth providers, configure em `src/lib/auth.ts` conforme documentação do Better Auth
 
 Veja `src/lib/auth.ts` e `src/routes/route-security.ts` para detalhes de implementação.

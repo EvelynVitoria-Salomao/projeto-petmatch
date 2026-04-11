@@ -4,7 +4,11 @@
 	"scripts": {
 		"dev": "bun --bun --watch src/index.ts",
 		"build": "bun --bun src/index.ts",
-		"test": "bun --bun test tests",
+		"test": "bun --bun test",
+		"test:unit": "bun --bun test tests/unit",
+		"test:integration": "bun --bun test tests/integration",
+		"test:watch": "bun --bun test --watch",
+		"test:coverage": "bun --bun test --coverage",
 		"lint": "bun --bun biome check",
 		"lint:fix": "bun --bun biome check --write",
 		"lint:fix:unsafe": "bun --bun biome check --write --unsafe",
@@ -29,6 +33,7 @@
 		"@types/bun": "^1.3.10",
 		"bun-types": "latest",
 		"drizzle-kit": "^0.31.9",
+		"postgres": "^3.4.9",
 		"tsx": "^4.21.0",
 		"typescript": "^5.9.3"
 	},
