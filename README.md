@@ -82,6 +82,8 @@ cd projeto-petmatch
 cd server
 bun install
 docker compose up -d
+bun db:migrate
+bun db:seed
 bun dev
 ```
 
