@@ -1,17 +1,26 @@
 import "./App.css";
-import PreviewPetList from "./components/PreviewPetList";
-import About from "./components/About";
-import Contact from "./components/Contact";
-import Footer from "./components/Footer";
+// importa os elementos de roteamento do React
+import {BrowserRouter, Routes, Route} from 'react-router-dom'
+// imports das pagina
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import OnResgister from "./pages/OnResgister";
+import PetList from "./pages/PetList";
+
 
 function App() {
   return (
-    <main>
-      <PreviewPetList/>
-      <About />
-      <Contact />
-      <Footer />
-    </main>
+    // aqui será só navagação e coisas gerais
+   <BrowserRouter>
+    <Routes>
+      <Route path='/' element={<Home/>}/>
+      <Route path='login' element={<Login/>}/>
+      <Route path='onResgister' element={<OnResgister/>}/>
+      <Route path='petList' element={<PetList/>}/>
+    </Routes>
+   </BrowserRouter>
+
+
   );
 }
 

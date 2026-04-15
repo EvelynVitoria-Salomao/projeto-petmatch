@@ -1,6 +1,8 @@
 import React from "react"
 import CardPet from "./PetCard"
 // importar aqui o useNavigate do React router dom
+import { useNavigate } from "react-router-dom"
+
 
 const dadosTestPets = [
     {
@@ -37,7 +39,8 @@ const dadosTestPets = [
 
 const PreviewPetList =  () => {
 const [listaPets, setListaPets] = React.useState([])
-// falta o hook useNavigate do React router dom para navegação
+//hook useNavigate do React router dom para navegação
+const navigate = useNavigate()
 
 React.useEffect(()=>{
 
@@ -74,7 +77,7 @@ React.useEffect(()=>{
             <button className="block mb-7 px-5 py-2 bg-secondary 
             text-white font-poppins font-medium rounded-3xl 
             shadow-[3px_4px_4px_0px_rgba(0,0,0,0.25)] cursor-pointer" 
-            >
+            onClick={()=> navigate('/PetList')} >
                 Ver todos
             </button>
         </div>
