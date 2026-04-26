@@ -11,10 +11,11 @@ export default {
         secondary: "#FF7A00", // laranja
         accent: "#E5B300", // amarelo
         white: "#FFFFFF",
-    },
-    fontFamily: {
+      },
+      fontFamily: {
         poppins: ['Poppins', 'sans-serif'],
       },
-  },
-  plugins: [],
-}}
+    },
+    plugins: [],
+  }
+}
