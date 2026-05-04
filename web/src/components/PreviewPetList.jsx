@@ -53,10 +53,13 @@ React.useEffect(()=>{
 
 
   return (
-    <section className="max-w-[100%] bg-primary">
+    <section className="max-w-[100%] bg-primary relative z-[5]">
         <div className="max-w-[95%] m-auto flex flex-col items-center">   
             <div className="max-w-[100%] mb-12">
-                <h2 className="self-start text-3xl font-poppins text-secondary font-medium pt-10 pb-6">Escolha seu pet :</h2>
+                <h2 className="self-start text-3xl font-poppins text-secondary 
+                font-medium pt-10 pb-6">
+                    Escolha seu pet :
+                </h2>
             
                 <ul className="max-w-[100%] grid grid-cols-[244px_244px_244px_244px] 
                 max-xl:grid-cols-[244px_244px_244px] max-md:grid-cols-[244px_244px]

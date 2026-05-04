@@ -10,7 +10,8 @@ function adotar(){
 }
 
   return (
-    <li className="w-[244px] h-[330px] rounded-3xl bg-white shadow-[6px_4px_2px_0px_rgba(30,30,30,0.2)]">
+    <li className="w-[244px] h-[330px] rounded-3xl bg-white 
+    shadow-[6px_4px_2px_0px_rgba(30,30,30,0.2)]">
        <div className="max-w-[80%] m-auto mb-2.5">
             <img className="max-w-full block" src={img} alt={nome}></img>
        </div>

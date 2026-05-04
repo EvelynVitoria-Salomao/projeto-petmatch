@@ -1,3 +1,4 @@
+import HeroSection from "../components/HeroSection";
 import PreviewPetList from "../components/PreviewPetList";
 import About from "../components/About";
 import Contact from "../components/Contact";
@@ -6,6 +7,7 @@ import Footer from "../components/Footer";
 const Home = ()=>{
     return (
         <main>
+          <HeroSection/>
           <PreviewPetList/>
           <About />
           <Contact />
