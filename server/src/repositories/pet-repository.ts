@@ -1,7 +1,7 @@
 import { and, eq, ilike, ne } from "drizzle-orm";
 import { db } from "@/database/connection";
 import { ong, pet } from "@/database/schema";
-import type { PetQueryParams, PetRequest } from "@/types/pet-types";
+import type { PetQueryParams, PetRequest } from "@/types/models/pet-types";
 
 export const petRepository = {
 	getPets: async (params: PetQueryParams) => {
@@ -47,11 +47,22 @@ export const petRepository = {
 			})
 			.returning();
 	},
-	updatePet: async (id: string, request: Partial<PetRequest>) => {
-		return await db.update(pet).set(request).where(eq(pet.id, id)).returning();
+	updatePet: async (
+		id: string,
+		ongId: string,
+		request: Partial<PetRequest>,
+	) => {
+		return await db
+			.update(pet)
+			.set(request)
+			.where(and(eq(pet.id, id), eq(pet.ongId, ongId)))
+			.returning();
 	},
-	deletePet: async (id: string) => {
-		return await db.delete(pet).where(eq(pet.id, id)).returning();
+	deletePet: async (id: string, ongId: string) => {
+		return await db
+			.delete(pet)
+			.where(and(eq(pet.id, id), eq(pet.ongId, ongId)))
+			.returning();
 	},
 	getPetAndOngIds: async (petId: string) => {
 		return await db

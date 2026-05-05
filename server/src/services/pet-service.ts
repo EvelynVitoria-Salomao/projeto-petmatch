@@ -5,7 +5,7 @@ import {
 	EntityNotFound,
 	ForbiddenError,
 } from "@/types/custom-errors";
-import type { PetQueryParams, PetRequest } from "@/types/pet-types";
+import type { PetQueryParams, PetRequest } from "@/types/models/pet-types";
 
 export const petService = {
 	getPets: async (params: PetQueryParams) => {
@@ -40,20 +40,24 @@ export const petService = {
 		if (ongResult.length === 0) {
 			throw new EntityNotFound("Nenhuma ONG encontrada para o usuário atual");
 		}
-		const petResult = await petRepository.getPetAndOngIds(id);
-		if (petResult.length === 0) {
-			throw new EntityNotFound("Pet não encontrado");
+		let updateResult: Awaited<ReturnType<typeof petRepository.updatePet>>;
+		try {
+			updateResult = await petRepository.updatePet(
+				id,
+				ongResult[0].ongId,
+				request,
+			);
+		} catch {
+			throw new DatabaseError("Erro inesperado ao atualizar pet");
 		}
-		if (petResult[0].ongId !== ongResult[0].ongId) {
+		if (updateResult.length === 0) {
+			const petResult = await petRepository.getPetAndOngIds(id);
+			if (petResult.length === 0) {
+				throw new EntityNotFound("Pet não encontrado");
+			}
 			throw new ForbiddenError(
 				"Pet informado não pertence à ONG do usuário atual",
 			);
-		}
-		let updateResult: Awaited<ReturnType<typeof petRepository.updatePet>>;
-		try {
-			updateResult = await petRepository.updatePet(id, request);
-		} catch {
-			throw new DatabaseError("Erro inesperado ao atualizar pet");
 		}
 		return updateResult[0];
 	},
@@ -62,15 +66,20 @@ export const petService = {
 		if (ongResult.length === 0) {
 			throw new EntityNotFound("Nenhuma ONG encontrada para o usuário atual");
 		}
-		const petResult = await petRepository.getPetAndOngIds(id);
-		if (petResult.length === 0) {
-			throw new EntityNotFound("Pet não encontrado");
+		let deleteResult: Awaited<ReturnType<typeof petRepository.deletePet>>;
+		try {
+			deleteResult = await petRepository.deletePet(id, ongResult[0].ongId);
+		} catch {
+			throw new DatabaseError("Erro inesperado ao deletar pet");
 		}
-		if (petResult[0].ongId !== ongResult[0].ongId) {
+		if (deleteResult.length === 0) {
+			const petResult = await petRepository.getPetAndOngIds(id);
+			if (petResult.length === 0) {
+				throw new EntityNotFound("Pet não encontrado");
+			}
 			throw new ForbiddenError(
 				"Pet informado não pertence à ONG do usuário atual",
 			);
 		}
-		await petRepository.deletePet(id);
 	},
 };

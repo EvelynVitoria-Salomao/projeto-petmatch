@@ -7,6 +7,8 @@ import {
 	DatabaseError,
 	EntityNotFound,
 	ForbiddenError,
+	formatError,
+	formatValidationError,
 } from "@/types/custom-errors";
 import { OpenAPI } from "./lib/auth-openapi";
 
@@ -19,11 +21,13 @@ const app = new Elysia()
 	.onError(({ code, error, status }) => {
 		switch (code) {
 			case "ENTITY_NOT_FOUND":
-				return status(404, error.message);
+				return status(404, formatError(error));
 			case "DATABASE_ERROR":
-				return status(500, error.message);
+				return status(500, formatError(error));
 			case "FORBIDDEN_ERROR":
-				return status(403, error.message);
+				return status(403, formatError(error));
+			case "VALIDATION":
+				return status(422, formatValidationError(error));
 		}
 	})
 	.use(
