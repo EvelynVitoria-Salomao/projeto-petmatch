@@ -3,6 +3,7 @@ import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { openAPI } from "better-auth/plugins";
 import { db } from "@/database/connection"; // your drizzle instance
 import * as schema from "@/database/schema";
+import { sendEmail } from "@/lib/mail";
 
 export const auth = betterAuth({
 	database: drizzleAdapter(db, {
@@ -17,7 +18,25 @@ export const auth = betterAuth({
 	plugins: [openAPI()],
 	emailAndPassword: {
 		enabled: true,
-		autoSignIn: true,
+		autoSignIn: false,
+		revokeSessionsOnPasswordReset: true,
+		requireEmailVerification: true,
+		sendResetPassword: async ({ user, url }) => {
+			sendEmail({
+				to: user.email,
+				subject: "Redefinir senha",
+				text: `Clique no link para redefinir a senha ${url}`,
+			});
+		},
+	},
+	emailVerification: {
+		sendVerificationEmail: async ({ user, url }) => {
+			sendEmail({
+				to: user.email,
+				subject: "Verificação de e-mail",
+				text: `Clique no link para verificar o e-mail ${url}`,
+			});
+		},
 	},
 	basePath: "/api/auth",
 	session: {
