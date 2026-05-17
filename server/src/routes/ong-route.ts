@@ -48,7 +48,7 @@ const ongRoutes = new Elysia({ prefix: "/ongs", tags: ["Ongs"] })
 			},
 			detail: {
 				description:
-					"Cria uma nova ONG para o usuário atual (autenticação necessária)",
+					"Cria uma nova ONG para o usuário atual (autenticação necessária)\nUtilize um request do tipo form-data",
 			},
 			auth: true,
 		},
@@ -80,7 +80,7 @@ const ongRoutes = new Elysia({ prefix: "/ongs", tags: ["Ongs"] })
 			},
 			detail: {
 				description:
-					"Atualiza uma ONG usando dados completos ou parciais (autenticação necessária)",
+					"Atualiza uma ONG usando dados completos ou parciais (autenticação necessária)\nUtilize um request do tipo form-data",
 			},
 			auth: true,
 		},
