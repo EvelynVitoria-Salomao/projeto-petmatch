@@ -64,7 +64,7 @@ const petRoutes = new Elysia({ prefix: "/pets", tags: ["Pets"] })
 			},
 			detail: {
 				description:
-					"Cria um novo pet para a ONG do usuário autenticado (autenticação necessária)\nUtilize um request do tipo form-data",
+					"Cria um novo pet para a ONG do usuário autenticado (autenticação necessária) - Utilize um request do tipo multipart/form-data",
 			},
 			auth: true,
 		},
@@ -93,7 +93,7 @@ const petRoutes = new Elysia({ prefix: "/pets", tags: ["Pets"] })
 			},
 			detail: {
 				description:
-					"Atualiza um pet usando dados completos ou parciais (autenticação necessária)\nUtilize um request do tipo form-data",
+					"Atualiza um pet usando dados completos ou parciais (autenticação necessária) - Utilize um request do tipo multipart/form-data",
 			},
 			auth: true,
 		},
