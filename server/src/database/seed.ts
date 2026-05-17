@@ -19,7 +19,7 @@ export async function seed() {
 		await db.delete(user);
 		console.log("Limpando dados existentes.\n\n");
 	} catch (error) {
-		console.error("Erro ao limpar dados existentes:", error);
+		console.error("Erro ao limpar dados do banco: ", error);
 	}
 
 	// Insert Users
@@ -84,8 +84,7 @@ export async function seed() {
 				whatsapp: "551133445566",
 				email: "contato@ecovida.org.br",
 				instagram: "@ecovida",
-				urlImagem:
-					"https://images.unsplash.com/photo-1576201836106-db1758fd1c97",
+				urlImagem: "images/ongs/1ong.jpg",
 				cep: "01310100",
 				uf: "SP",
 				cidade: "São Paulo",
@@ -104,7 +103,7 @@ export async function seed() {
 				whatsapp: null,
 				email: "contato@amigoanimal.org.br",
 				instagram: "@amigoanimal",
-				urlImagem: "https://images.unsplash.com/photo-1548199973-03cce0bbc87b",
+				urlImagem: "images/ongs/2ong.jpg",
 				cep: "20040002",
 				uf: "RJ",
 				cidade: "Rio de Janeiro",
@@ -128,8 +127,7 @@ export async function seed() {
 			porte: "G",
 			dataNascimento: new Date("2025-02-01"),
 			descricao: "Cão grande, amigável e preguiçoso",
-			urlImagem:
-				"https://www.publicdomainpictures.net/pictures/200000/nahled/pit-bull-1475762415GgL.jpg",
+			urlImagem: "images/pets/pitbull.jpg",
 			adotado: false,
 			ongId: ong1.id,
 			updatedAt: now,
@@ -142,8 +140,7 @@ export async function seed() {
 			porte: "M",
 			dataNascimento: new Date("2024-05-01"),
 			descricao: "Gato muito enérgico",
-			urlImagem:
-				"https://www.publicdomainpictures.net/pictures/210000/nahled/chat-siamois-.jpg",
+			urlImagem: "images/pets/gato.jpg",
 			adotado: false,
 			ongId: ong1.id,
 			updatedAt: now,
@@ -156,8 +153,7 @@ export async function seed() {
 			porte: "P",
 			dataNascimento: new Date("2024-01-10"),
 			descricao: "Assovia o hino do time e é muito manso.",
-			urlImagem:
-				"https://www.publicdomainpictures.net/pictures/230000/nahled/cockatiel-15031012319lE.jpg",
+			urlImagem: "images/pets/calopsita.jpg",
 			adotado: false,
 			ongId: ong1.id,
 			updatedAt: now,
@@ -170,8 +166,7 @@ export async function seed() {
 			porte: "P",
 			dataNascimento: new Date("2024-11-20"),
 			descricao: "Adora correr na rodinha durante a noite.",
-			urlImagem:
-				"https://www.publicdomainpictures.net/pictures/120000/nahled/syrian-hamster-1429208586tz7.jpg",
+			urlImagem: "images/pets/hamster.jpg",
 			adotado: false,
 			ongId: ong2.id,
 			updatedAt: now,
@@ -184,8 +179,7 @@ export async function seed() {
 			porte: "G",
 			dataNascimento: new Date("2021-03-30"),
 			descricao: "Ótimo para guarda, mas muito carinhoso.",
-			urlImagem:
-				"https://www.publicdomainpictures.net/pictures/60000/nahled/duitse-herder-nero-5.jpg",
+			urlImagem: "images/pets/pastor%20alemao.jpg",
 			adotado: false,
 			ongId: ong2.id,
 			updatedAt: now,
@@ -198,8 +192,7 @@ export async function seed() {
 			porte: "P",
 			dataNascimento: new Date("2023-06-05"),
 			descricao: "Muito fofa, adora comer cenoura e feno.",
-			urlImagem:
-				"https://www.publicdomainpictures.net/pictures/190000/nahled/holland-lop-rabbit.jpg",
+			urlImagem: "images/pets/coelho%20mini%20lop.jpg",
 			adotado: true,
 			ongId: ong2.id,
 			updatedAt: now,
@@ -212,8 +205,7 @@ export async function seed() {
 			porte: "M",
 			dataNascimento: new Date("2020-05-30"),
 			descricao: 'Fala "bom dia" e imita o som do telefone.',
-			urlImagem:
-				"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBGD3GzcnVlDryS0_MTZTFIrNG-sT9E6zWaQ&s",
+			urlImagem: "images/pets/papagaio.jpg",
 			adotado: false,
 			ongId: ong1.id,
 			updatedAt: now,
@@ -226,8 +218,7 @@ export async function seed() {
 			porte: "P",
 			dataNascimento: new Date("2024-03-18"),
 			descricao: "Conversa fazendo barulhinhos quando vê comida.",
-			urlImagem:
-				"https://www.publicdomainpictures.net/pictures/550000/nahled/cavia-huiscavia-knaagdier.jpg",
+			urlImagem: "images/pets/porquinho%20da%20india.jpg",
 			adotado: false,
 			ongId: ong1.id,
 			updatedAt: now,
