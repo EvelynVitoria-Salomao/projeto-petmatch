@@ -1,26 +1,21 @@
 import { and, eq, ilike } from "drizzle-orm";
 import { db } from "@/database/connection";
 import { ong, user } from "@/database/schema";
-import type { OngQueryParams, OngRequest } from "@/types/models/ong-types";
+import type {
+	OngInsert,
+	OngQueryParams,
+	OngRequest,
+	OngUpdate,
+} from "@/types/models/ong-types";
 
 export const ongRepository = {
 	getOngById: async (id: string) => {
 		return await db.select().from(ong).where(eq(ong.id, id));
 	},
-	createOng: async (request: OngRequest, userId: string) => {
-		return await db
-			.insert(ong)
-			.values({
-				...request,
-				userId,
-			})
-			.returning();
+	createOng: async (request: OngInsert) => {
+		return await db.insert(ong).values(request).returning();
 	},
-	updateOng: async (
-		ongId: string,
-		userId: string,
-		request: Partial<OngRequest>,
-	) => {
+	updateOng: async (ongId: string, userId: string, request: OngUpdate) => {
 		return await db
 			.update(ong)
 			.set(request)
@@ -52,8 +47,12 @@ export const ongRepository = {
 			.where(
 				and(
 					params.cnpj ? eq(ong.cnpj, params.cnpj) : undefined,
-					params.razaoSocial ? eq(ong.razaoSocial, params.razaoSocial) : undefined,
-					params.nomeFantasia ? ilike(ong.nomeFantasia, `%${params.nomeFantasia}%`) : undefined,
+					params.razaoSocial
+						? eq(ong.razaoSocial, params.razaoSocial)
+						: undefined,
+					params.nomeFantasia
+						? ilike(ong.nomeFantasia, `%${params.nomeFantasia}%`)
+						: undefined,
 					params.telefone ? eq(ong.telefone, params.telefone) : undefined,
 					params.whatsapp ? eq(ong.whatsapp, params.whatsapp) : undefined,
 					params.email ? eq(ong.email, params.email) : undefined,

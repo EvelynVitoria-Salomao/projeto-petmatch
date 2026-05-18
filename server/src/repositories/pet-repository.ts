@@ -1,7 +1,11 @@
 import { and, eq, ilike, ne } from "drizzle-orm";
 import { db } from "@/database/connection";
 import { ong, pet } from "@/database/schema";
-import type { PetQueryParams, PetRequest } from "@/types/models/pet-types";
+import type {
+	PetInsert,
+	PetQueryParams,
+	PetUpdate,
+} from "@/types/models/pet-types";
 
 export const petRepository = {
 	getPets: async (params: PetQueryParams) => {
@@ -38,20 +42,10 @@ export const petRepository = {
 			.innerJoin(ong, eq(pet.ongId, ong.id))
 			.where(eq(pet.id, id));
 	},
-	createPet: async (request: PetRequest, ongId: string) => {
-		return await db
-			.insert(pet)
-			.values({
-				...request,
-				ongId,
-			})
-			.returning();
+	createPet: async (request: PetInsert) => {
+		return await db.insert(pet).values(request).returning();
 	},
-	updatePet: async (
-		id: string,
-		ongId: string,
-		request: Partial<PetRequest>,
-	) => {
+	updatePet: async (id: string, ongId: string, request: PetUpdate) => {
 		return await db
 			.update(pet)
 			.set(request)
