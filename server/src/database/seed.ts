@@ -1,6 +1,7 @@
 import { hashPassword } from "better-auth/crypto";
 import { db } from "@/database/connection";
 import { account, ong, pet, user } from "@/database/schema";
+import { supabase, supabaseBucket } from "@/lib/supabase";
 
 function mapEspecieToEnum(value: string): "Cachorro" | "Gato" | "Outro" {
 	if (value === "Cão") return "Cachorro";
@@ -11,15 +12,33 @@ function mapEspecieToEnum(value: string): "Cachorro" | "Gato" | "Outro" {
 export async function seed() {
 	const now = new Date();
 
+	const readonlyBucket = "test-readonly";
+	let deletedPets: (typeof pet.$inferSelect)[] = [];
+	let deletedOngs: (typeof ong.$inferSelect)[] = [];
+
 	// Clear existing data
 	try {
-		await db.delete(pet);
-		await db.delete(ong);
+		deletedPets = await db.delete(pet).returning();
+		deletedOngs = await db.delete(ong).returning();
 		await db.delete(account);
 		await db.delete(user);
 		console.log("Limpando dados existentes.\n\n");
 	} catch (error) {
 		console.error("Erro ao limpar dados do banco: ", error);
+	}
+
+	// Clear images not in readonly bucket
+	const allImages: string[] = deletedPets
+		.map((pet) => pet.urlImagem)
+		.concat(deletedOngs.map((ong) => ong.urlImagem));
+	const imagesToDelete: string[] = allImages
+		.filter((url) => !url.startsWith(readonlyBucket))
+		.map((url) => {
+			const index = url.indexOf("/");
+			return url.substring(index + 1);
+		});
+	if (imagesToDelete.length > 0) {
+		await supabase.storage.from(supabaseBucket).remove(imagesToDelete);
 	}
 
 	// Insert Users
@@ -84,7 +103,7 @@ export async function seed() {
 				whatsapp: "551133445566",
 				email: "contato@ecovida.org.br",
 				instagram: "@ecovida",
-				urlImagem: "images/ongs/1ong.jpg",
+				urlImagem: "test-readonly/test/1ong.jpg",
 				cep: "01310100",
 				uf: "SP",
 				cidade: "São Paulo",
@@ -103,7 +122,7 @@ export async function seed() {
 				whatsapp: null,
 				email: "contato@amigoanimal.org.br",
 				instagram: "@amigoanimal",
-				urlImagem: "images/ongs/2ong.jpg",
+				urlImagem: "test-readonly/test/2ong.jpg",
 				cep: "20040002",
 				uf: "RJ",
 				cidade: "Rio de Janeiro",
@@ -127,7 +146,7 @@ export async function seed() {
 			porte: "G",
 			dataNascimento: new Date("2025-02-01"),
 			descricao: "Cão grande, amigável e preguiçoso",
-			urlImagem: "images/pets/pitbull.jpg",
+			urlImagem: "test-readonly/test/pitbull.jpg",
 			adotado: false,
 			ongId: ong1.id,
 			updatedAt: now,
@@ -140,7 +159,7 @@ export async function seed() {
 			porte: "M",
 			dataNascimento: new Date("2024-05-01"),
 			descricao: "Gato muito enérgico",
-			urlImagem: "images/pets/gato.jpg",
+			urlImagem: "test-readonly/test/gato.jpg",
 			adotado: false,
 			ongId: ong1.id,
 			updatedAt: now,
@@ -153,7 +172,7 @@ export async function seed() {
 			porte: "P",
 			dataNascimento: new Date("2024-01-10"),
 			descricao: "Assovia o hino do time e é muito manso.",
-			urlImagem: "images/pets/calopsita.jpg",
+			urlImagem: "test-readonly/test/calopsita.jpg",
 			adotado: false,
 			ongId: ong1.id,
 			updatedAt: now,
@@ -166,7 +185,7 @@ export async function seed() {
 			porte: "P",
 			dataNascimento: new Date("2024-11-20"),
 			descricao: "Adora correr na rodinha durante a noite.",
-			urlImagem: "images/pets/hamster.jpg",
+			urlImagem: "test-readonly/test/hamster.jpg",
 			adotado: false,
 			ongId: ong2.id,
 			updatedAt: now,
@@ -179,7 +198,7 @@ export async function seed() {
 			porte: "G",
 			dataNascimento: new Date("2021-03-30"),
 			descricao: "Ótimo para guarda, mas muito carinhoso.",
-			urlImagem: "images/pets/pastor%20alemao.jpg",
+			urlImagem: "test-readonly/test/pastor%20alemao.jpg",
 			adotado: false,
 			ongId: ong2.id,
 			updatedAt: now,
@@ -192,7 +211,7 @@ export async function seed() {
 			porte: "P",
 			dataNascimento: new Date("2023-06-05"),
 			descricao: "Muito fofa, adora comer cenoura e feno.",
-			urlImagem: "images/pets/coelho%20mini%20lop.jpg",
+			urlImagem: "test-readonly/test/coelho%20mini%20lop.jpg",
 			adotado: true,
 			ongId: ong2.id,
 			updatedAt: now,
@@ -205,7 +224,7 @@ export async function seed() {
 			porte: "M",
 			dataNascimento: new Date("2020-05-30"),
 			descricao: 'Fala "bom dia" e imita o som do telefone.',
-			urlImagem: "images/pets/papagaio.jpg",
+			urlImagem: "test-readonly/test/papagaio.jpg",
 			adotado: false,
 			ongId: ong1.id,
 			updatedAt: now,
@@ -218,7 +237,7 @@ export async function seed() {
 			porte: "P",
 			dataNascimento: new Date("2024-03-18"),
 			descricao: "Conversa fazendo barulhinhos quando vê comida.",
-			urlImagem: "images/pets/porquinho%20da%20india.jpg",
+			urlImagem: "test-readonly/test/porquinho%20da%20india.jpg",
 			adotado: false,
 			ongId: ong1.id,
 			updatedAt: now,
