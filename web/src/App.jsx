@@ -4,8 +4,11 @@ import {BrowserRouter, Routes, Route} from 'react-router-dom'
 // imports das pagina
 import Home from "./pages/Home";
 import Login from "./pages/Login";
-import OnResgister from "./pages/OnResgister";
+
 import PetList from "./pages/petList";
+import Password from "./pages/recoverPassword";
+import NewPassword from "./pages/newPassword";
+import Checked from "./pages/checked";
 
 
 function App() {
@@ -14,9 +17,13 @@ function App() {
    <BrowserRouter>
     <Routes>
       <Route path='/' element={<Home/>}/>
-      <Route path='login' element={<Login/>}/>
-      <Route path='onResgister' element={<OnResgister/>}/>
+      <Route path='Login' element={<Login/>}/>
+    
       <Route path='petList' element={<PetList/>}/>
+      <Route path='/Login/recoverPassword' element={<Password/>}/>
+      <Route path='/Login/newPassword' element={<NewPassword/>}/>
+      <Route path='/Login/checked' element={<Checked/>}/>
+     
     </Routes>
    </BrowserRouter>
 
