@@ -1,6 +1,13 @@
 import { hashPassword } from "better-auth/crypto";
 import { db } from "@/database/connection";
-import { account, ong, pet, user } from "@/database/schema";
+import {
+	account,
+	ong,
+	pet,
+	session,
+	user,
+	verification,
+} from "@/database/schema";
 
 function mapEspecieToEnum(value: string): "Cachorro" | "Gato" | "Outro" {
 	if (value === "Cão") return "Cachorro";
@@ -13,6 +20,8 @@ export async function seed() {
 
 	// Clear existing data
 	try {
+		await db.delete(verification);
+		await db.delete(session);
 		await db.delete(pet);
 		await db.delete(ong);
 		await db.delete(account);
