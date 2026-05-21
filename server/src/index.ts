@@ -1,3 +1,4 @@
+import cors from "@elysiajs/cors";
 import openapi from "@elysiajs/openapi";
 import { Elysia } from "elysia";
 import ongRoutes from "@/routes/ong-route";
@@ -34,6 +35,13 @@ const app = new Elysia()
 				return status(500, formatError(error));
 		}
 	})
+	.use(
+		cors({
+			origin: ["http://localhost:3000", "http://localhost:5173"],
+			methods: ["GET", "POST", "PUT", "DELETE"],
+			credentials: true,
+		}),
+	)
 	.use(
 		openapi({
 			documentation: {

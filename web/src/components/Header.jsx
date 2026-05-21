@@ -1,6 +1,7 @@
 import React from "react"
 import LogoTipo from "../assets/icons/Logo.svg"
 import SvgSetaLogIn from "./SvgSetaLogIn.jsx"
+import { Link } from "react-router-dom"
 
 const Header = ()=>{
     const [mostraOps, setMostraOps] = React.useState(false)
@@ -22,12 +23,12 @@ const Header = ()=>{
                     Cadastrar ONG
                 </a>
                
-                <a className="flex justify-center items-center bg-secondary text-[#FFFFFF] 
-                text-lg w-[100px] h-[46px] rounded-[40px] shadow-[3px_4px_4px_0px_rgba(0,0,0,0.25)] 
-                cursor-pointer sm:w-[110px] md:w-[130px] md:h-[40px]">
-                    Login 
-                    <SvgSetaLogIn/>
-                </a>
+                <Link to="/login" className="flex justify-center items-center bg-secondary text-[#FFFFFF] 
+text-lg w-[100px] h-[46px] rounded-[40px] shadow-[3px_4px_4px_0px_rgba(0,0,0,0.25)] 
+cursor-pointer sm:w-[110px] md:w-[130px] md:h-[40px]">
+    Login 
+    <SvgSetaLogIn/>
+</Link>
 
                 <button className="w-[80px] h-[46px] bg-[#ededed] rounded-[10px] ml-[14px]
                 text-[#404040] shadow-[3px_4px_4px_0px_rgba(0,0,0,0.10)] cursor-pointer 

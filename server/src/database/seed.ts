@@ -1,7 +1,14 @@
 import { hashPassword } from "better-auth/crypto";
 import { db } from "@/database/connection";
-import { account, ong, pet, user } from "@/database/schema";
 import { supabase, supabaseBucket } from "@/lib/supabase";
+import {
+	account,
+	ong,
+	pet,
+	session,
+	user,
+	verification,
+} from "@/database/schema";
 
 function mapEspecieToEnum(value: string): "Cachorro" | "Gato" | "Outro" {
 	if (value === "Cão") return "Cachorro";
