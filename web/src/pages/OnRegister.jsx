@@ -1,6 +1,8 @@
 
 function OnResgister (){
-  return (<></>)   
+  return (<>
+  
+  </>)   
 }
 
 export default OnResgister

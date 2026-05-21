@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { Link } from 'react-router-dom';
 import imgPatinhas from "../assets/patinhas-verdes.png";
 import imgLoginCachorro from "../assets/dog-computador.png";
 import logoLogin from "../assets/logo-login.png";
@@ -134,9 +135,9 @@ const Login = () => {
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
                   <input type="password" placeholder="senha:" style={inputStyle} />
-                  <a href="#" style={{ fontSize: '10px', color: '#999', textAlign: 'right', paddingRight: '8px', textDecoration: 'none' }}>
+                  <Link to={"recoverPassword"} href="#" style={{ fontSize: '10px', color: '#999', textAlign: 'right', paddingRight: '8px', textDecoration: 'none' }}>
                     Esqueci minha senha
-                  </a>
+                  </Link>
                 </div>
 
                 <button type="submit" style={{
