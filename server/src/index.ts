@@ -1,3 +1,4 @@
+import cors from "@elysiajs/cors";
 import openapi from "@elysiajs/openapi";
 import { Elysia } from "elysia";
 import ongRoutes from "@/routes/ong-route";
@@ -9,6 +10,7 @@ import {
 	ForbiddenError,
 	formatError,
 	formatValidationError,
+	ImageStorageError,
 } from "@/types/custom-errors";
 import { OpenAPI } from "./lib/auth-openapi";
 
@@ -17,6 +19,7 @@ const app = new Elysia()
 		DATABASE_ERROR: DatabaseError,
 		ENTITY_NOT_FOUND: EntityNotFound,
 		FORBIDDEN_ERROR: ForbiddenError,
+		IMAGE_STORAGE_ERROR: ImageStorageError,
 	})
 	.onError(({ code, error, status }) => {
 		switch (code) {
@@ -28,8 +31,17 @@ const app = new Elysia()
 				return status(403, formatError(error));
 			case "VALIDATION":
 				return status(422, formatValidationError(error));
+			case "IMAGE_STORAGE_ERROR":
+				return status(500, formatError(error));
 		}
 	})
+	.use(
+		cors({
+			origin: ["http://localhost:3000", "http://localhost:5173"],
+			methods: ["GET", "POST", "PUT", "DELETE"],
+			credentials: true,
+		}),
+	)
 	.use(
 		openapi({
 			documentation: {

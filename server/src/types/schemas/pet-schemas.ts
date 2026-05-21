@@ -49,8 +49,10 @@ export const PetBodyParse = t.Object({
 	descricao: t.String({
 		error: "A descrição é obrigatória e deve ser um texto.",
 	}),
-	urlImagem: t.String({
-		error: "A URL da imagem é obrigatória e deve ser um texto.",
+	imagem: t.File({
+		type: ["image/jpeg", "image/png"],
+		maxSize: "10m",
+		error: "A imagem deve ser um arquivo JPEG ou PNG com no máximo 10MB.",
 	}),
 });
 

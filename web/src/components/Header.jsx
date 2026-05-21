@@ -23,7 +23,7 @@ const Header = ()=>{
                     Cadastrar ONG
                 </a>
                
-                <Link to="/Login"className="flex justify-center items-center bg-secondary text-[#FFFFFF] 
+                <Link to="/Login" className="flex justify-center items-center bg-secondary text-[#FFFFFF] 
                 text-lg w-[100px] h-[46px] rounded-[40px] shadow-[3px_4px_4px_0px_rgba(0,0,0,0.25)] 
                 cursor-pointer sm:w-[110px] md:w-[130px] md:h-[40px]">
                     Login 
