@@ -6,6 +6,8 @@ export class EntityNotFound extends Error {}
 
 export class ForbiddenError extends Error {}
 
+export class ImageStorageError extends Error {}
+
 export const ValidationErrorResponse = t.Array(
 	t.Object({
 		field: t.String(),

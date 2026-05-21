@@ -41,9 +41,6 @@ export const OngBodyParse = t.Object({
 		maxLength: 255,
 		error: "Instagram deve ser um texto com até 255 caracteres",
 	}),
-	urlImagem: t.String({
-		error: "URL da imagem é obrigatória e deve ser um texto",
-	}),
 	cep: t.String({
 		minLength: 8,
 		maxLength: 8,
@@ -69,6 +66,11 @@ export const OngBodyParse = t.Object({
 	numero: t.String({
 		maxLength: 10,
 		error: "Número deve ter até 10 dígitos podendo incluir letras",
+	}),
+	imagem: t.File({
+		type: ["image/jpeg", "image/png"],
+		maxSize: "10m",
+		error: "A imagem deve ser um arquivo JPEG ou PNG com no máximo 10MB.",
 	}),
 });
 
