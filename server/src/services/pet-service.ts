@@ -29,11 +29,12 @@ export const petService = {
 		if (ongResult.length === 0) {
 			throw new EntityNotFound("Nenhuma ONG encontrada para o usuário atual");
 		}
-		const urlImagem = await imageService.uploadImage(request.imagem, "pets");
+		const { imagem, ...petData } = request;
+		const urlImagem = await imageService.uploadImage(imagem, "pets");
 		const ongId = ongResult[0].ongId;
 		let result: Awaited<ReturnType<typeof petRepository.createPet>>;
 		try {
-			result = await petRepository.createPet({ ...request, urlImagem, ongId });
+			result = await petRepository.createPet({ ...petData, urlImagem, ongId });
 		} catch {
 			await imageService.deleteImage(urlImagem);
 			throw new DatabaseError("Erro inesperado ao cadastrar pet");
@@ -61,16 +62,17 @@ export const petService = {
 			);
 		}
 		// salva a nova imagem se existir no request
+		const { imagem, ...petData } = request;
 		const antigaImagem = petResult[0].pet.urlImagem;
 		let novaImagem: string | undefined;
-		if (request.imagem) {
-			novaImagem = await imageService.uploadImage(request.imagem, "pets");
+		if (imagem) {
+			novaImagem = await imageService.uploadImage(imagem, "pets");
 		}
 		// salva os dados no banco e apaga a nova imagem em caso de erro
 		let updateResult: Awaited<ReturnType<typeof petRepository.updatePet>>;
 		try {
 			updateResult = await petRepository.updatePet(id, ongResult[0].ongId, {
-				...request,
+				...petData,
 				urlImagem: novaImagem,
 			});
 		} catch {
@@ -108,6 +110,6 @@ export const petService = {
 				"Pet informado não pertence à ONG do usuário atual",
 			);
 		}
-		imageService.deleteImage(deleteResult[0].urlImagem);
+		await imageService.deleteImage(deleteResult[0].urlImagem);
 	},
 };

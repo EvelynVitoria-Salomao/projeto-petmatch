@@ -17,10 +17,11 @@ export const ongService = {
 		return result[0];
 	},
 	createOng: async (request: OngRequest, userId: string) => {
-		const urlImagem = await imageService.uploadImage(request.imagem, "ongs");
+		const { imagem, ...ongData } = request;
+		const urlImagem = await imageService.uploadImage(imagem, "ongs");
 		try {
 			const result = await ongRepository.createOng({
-				...request,
+				...ongData,
 				urlImagem,
 				userId,
 			});
@@ -47,16 +48,17 @@ export const ongService = {
 			throw new ForbiddenError("ONG informada não pertence ao usuário atual");
 		}
 		// salva a nova imagem se existir no request
+		const { imagem, ...ongData } = request;
 		const antigaImagem = ongResult[0].urlImagem;
 		let novaImagem: string | undefined;
-		if (request.imagem) {
-			novaImagem = await imageService.uploadImage(request.imagem, "ongs");
+		if (imagem) {
+			novaImagem = await imageService.uploadImage(imagem, "ongs");
 		}
 		// salva os dados no banco e apaga a nova imagem em caso de erro
 		let updateResult: Awaited<ReturnType<typeof ongRepository.updateOng>>;
 		try {
 			updateResult = await ongRepository.updateOng(ongId, userId, {
-				...request,
+				...ongData,
 				urlImagem: novaImagem,
 			});
 		} catch {

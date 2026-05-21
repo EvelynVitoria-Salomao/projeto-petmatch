@@ -25,9 +25,10 @@ export const imageService = {
 	deleteImage: async (imagePath: string) => {
 		const { bucket, filePath } = getBucketAndFilePath(imagePath);
 		const response = await supabase.storage.from(bucket).remove([filePath]);
-		if (response.error) {
-			console.log("Supabase Error: ", response.error.toJSON());
-			throw new ImageStorageError("Erro ao fazer upload da imagem");
+		if (response.data?.length === 0) {
+			console.log(
+				`Erro ao remover imagem: ${imagePath} - Arquivo pode não existir ou bucket não possui políticas de DELETE`,
+			);
 		}
 	},
 	buildPublicUrl: (imagePath: string) => {
