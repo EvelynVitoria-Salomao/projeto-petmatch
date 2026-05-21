@@ -27,6 +27,8 @@ export async function seed() {
 	try {
 		deletedPets = await db.delete(pet).returning();
 		deletedOngs = await db.delete(ong).returning();
+		await db.delete(session);
+		await db.delete(verification);
 		await db.delete(account);
 		await db.delete(user);
 		console.log("Limpando dados existentes.\n\n");
