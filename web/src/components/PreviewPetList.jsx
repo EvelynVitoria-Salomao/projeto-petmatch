@@ -3,40 +3,6 @@ import CardPet from "./PetCard"
 // importar aqui o useNavigate do React router dom
 import { useNavigate } from "react-router-dom"
 
-
-const dadosTestPets = [
-    {
-        id:1,
-        img:'/src/assets/img/pet-teste.jpg',
-        nome:'Bob',
-        localizacao:'São Paulo - SP'    
-    },
-    {
-        id:2,
-        img:'/src/assets/img/pet-teste.jpg',
-        nome:'Bob',
-        localizacao:'São Paulo - SP'    
-    },
-    {
-        id:3,
-        img:'/src/assets/img/pet-teste.jpg',
-        nome:'Bob',
-        localizacao:'São Paulo - SP'    
-    },
-    {
-        id:4,
-        img:'/src/assets/img/pet-teste.jpg',
-        nome:'Bob',
-        localizacao:'São Paulo - SP'    
-    },
-    {
-        id:5,
-        img:'/src/assets/img/pet-teste.jpg',
-        nome:'Bob',
-        localizacao:'São Paulo - SP'    
-    },
-]
-
 const PreviewPetList =  () => {
 const [listaPets, setListaPets] = React.useState([])
 //hook useNavigate do React router dom para navegação
@@ -45,9 +11,20 @@ const navigate = useNavigate()
 React.useEffect(()=>{
 
     async function buscaListaPets(){
+        try{
         // aqui viria requisição e o set seria com os dados retornados
-        setListaPets(dadosTestPets)
-    } 
+        const response = await fetch('http://localhost:3000/api/pets',{
+            method:'GET',
+            headers:{
+                'Content-type': 'application/json'
+            }
+        })
+        const json = await response.json()
+        setListaPets(json)
+    }catch(e){
+        console.log(e)
+    }
+}
     buscaListaPets()
 },[])
 
@@ -67,9 +44,10 @@ React.useEffect(()=>{
                 gap-12 items-center justify-items-center">
                     {listaPets.length > 0 && listaPets.map((pet)=>
                         <CardPet key={pet.id}
-                        img={pet.img}
+                        img={pet.urlImagem}
                         nome={pet.nome}
-                        localizacao={pet.localizacao}
+                        cidade={pet.cidade}
+                        estado={pet.estado}
                         />
                     )}
                     
