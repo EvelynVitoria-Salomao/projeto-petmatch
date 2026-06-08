@@ -5,6 +5,7 @@ import imgPatinhas from "../assets/patinhas-verdes.png";
 import imgLoginCachorro from "../assets/dog-computador.png";
 import logoLogin from "../assets/logo-login.png";
 import { authClient } from "../lib/auth-client";
+import { frontendUrl } from "../lib/environment";
 
 
 const loginStyles = `
@@ -103,7 +104,7 @@ const Login = () => {
   const handleGoogleLogin = async () => {
     await authClient.signIn.social({
         provider: "google",
-        callbackURL: "http://localhost:5173"
+        callbackURL: frontendUrl,
     });
   };
 
