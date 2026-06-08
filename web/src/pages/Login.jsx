@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 import imgPatinhas from "../assets/patinhas-verdes.png";
 import imgLoginCachorro from "../assets/dog-computador.png";
 import logoLogin from "../assets/logo-login.png";
+import { authClient } from "../lib/auth-client";
+import { frontendUrl } from "../lib/environment";
 
 
 const loginStyles = `
@@ -99,6 +101,13 @@ const inputStyle = {
 const Login = () => {
   const navigate = useNavigate();
 
+  const handleGoogleLogin = async () => {
+    await authClient.signIn.social({
+        provider: "google",
+        callbackURL: frontendUrl,
+    });
+  };
+
   return (
     <>
       <style>{loginStyles}</style>
@@ -156,7 +165,7 @@ const Login = () => {
                   Login
                 </button>
 
-                <button type="button" style={{
+                <button type="button" onClick={handleGoogleLogin} style={{
                   width: '100%',
                   backgroundColor: '#DB4437',
                   color: 'white',

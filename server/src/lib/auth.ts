@@ -5,6 +5,24 @@ import { db } from "@/database/connection"; // your drizzle instance
 import * as schema from "@/database/schema";
 import { sendEmail } from "@/lib/mail";
 
+const googleClientId = process.env.GOOGLE_CLIENT_ID as string;
+const googleClientSecret = process.env.GOOGLE_CLIENT_SECRET as string;
+const betterAuthURL = process.env.BETTER_AUTH_URL as string;
+const frontendURL = process.env.FRONTEND_URL as string;
+
+if (!googleClientId) {
+	throw new Error("Could not find environment variable GOOGLE_CLIENT_ID");
+}
+if (!googleClientSecret) {
+	throw new Error("Could not find environment variable GOOGLE_CLIENT_SECRET");
+}
+if (!betterAuthURL) {
+	throw new Error("Could not find environment variable BETTER_AUTH_URL");
+}
+if (!frontendURL) {
+	throw new Error("Could not find environment variable FRONTEND_URL");
+}
+
 export const auth = betterAuth({
 	database: drizzleAdapter(db, {
 		provider: "pg", // or "mysql", "sqlite"
@@ -38,7 +56,17 @@ export const auth = betterAuth({
 			});
 		},
 	},
+	socialProviders: {
+		google: {
+			prompt: "select_account consent",
+			accessType: "offline",
+			clientId: googleClientId,
+			clientSecret: googleClientSecret,
+		},
+	},
 	basePath: "/api/auth",
+	baseURL: betterAuthURL,
+	trustedOrigins: [frontendURL, betterAuthURL],
 	session: {
 		expiresIn: 60 * 60 * 24, //24 horas
 		cookieCache: {

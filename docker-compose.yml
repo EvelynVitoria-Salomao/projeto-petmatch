@@ -36,6 +36,9 @@ services:
       - SUPABASE_BUCKET=${SUPABASE_BUCKET}
       - RESEND_API_KEY=${RESEND_API_KEY}
       - RESEND_SENDER_EMAIL=${RESEND_SENDER_EMAIL}
+      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
+      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
+      - FRONTEND_URL=${FRONTEND_URL}
     depends_on:
       database:
         condition: service_healthy
@@ -56,6 +59,7 @@ services:
       - server
     environment:
       - VITE_API_URL=${VITE_API_URL}
+      - VITE_FRONTEND_URL=${VITE_FRONTEND_URL}
     volumes:
       - ./web:/usr/src/app
       - node_modules_web:/usr/src/app/node_modules
