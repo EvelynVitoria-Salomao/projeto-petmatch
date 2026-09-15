@@ -2,6 +2,7 @@ import React from "react"
 import CardPet from "./PetCard"
 // importar aqui o useNavigate do React router dom
 import { useNavigate } from "react-router-dom"
+import { apiUrl } from "../lib/environment"
 
 const PreviewPetList =  () => {
 const [listaPets, setListaPets] = React.useState([])
@@ -12,8 +13,7 @@ React.useEffect(()=>{
 
     async function buscaListaPets(){
         try{
-        // aqui viria requisição e o set seria com os dados retornados
-        const response = await fetch('http://localhost:3000/api/pets',{
+        const response = await fetch(`${apiUrl}/api/pets`,{
             method:'GET',
             headers:{
                 'Content-type': 'application/json'
@@ -28,6 +28,10 @@ React.useEffect(()=>{
     buscaListaPets()
 },[])
 
+//na Home, qualquer interação com o card leva para a listagem completa, onde os detalhes/contato realmente funcionam
+function irParaListaCompleta(){
+    navigate('/PetList')
+}
 
   return (
     <section className="max-w-[100%] bg-primary relative z-[5]">
@@ -44,21 +48,19 @@ React.useEffect(()=>{
                 gap-12 items-center justify-items-center">
                     {listaPets.length > 0 && listaPets.map((pet)=>
                         <CardPet key={pet.id}
-                        img={pet.urlImagem}
-                        nome={pet.nome}
-                        cidade={pet.cidade}
-                        estado={pet.estado}
+                        pet={pet}
+                        onSaibaMais={irParaListaCompleta}
+                        onAdotar={irParaListaCompleta}
                         />
                     )}
                     
                 </ul>
             </div>        
             
-            {/* button deve ser substituido por <Link to="/rota">Ver todos </Link> do React Router Dom*/}
             <button className="block mb-7 px-5 py-2 bg-secondary 
             text-white font-poppins font-medium rounded-3xl 
             shadow-[3px_4px_4px_0px_rgba(0,0,0,0.25)] cursor-pointer" 
-            onClick={()=> navigate('/PetList')} >
+            onClick={irParaListaCompleta} >
                 Ver todos
             </button>
         </div>

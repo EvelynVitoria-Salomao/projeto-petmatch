@@ -5,7 +5,7 @@ import {BrowserRouter, Routes, Route} from 'react-router-dom'
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 
-import PetList from "./pages/petList";
+import PetList from "./pages/PetList";
 import Password from "./pages/recoverPassword";
 import NewPassword from "./pages/newPassword";
 import Checked from "./pages/checked";
@@ -17,9 +17,9 @@ function App() {
    <BrowserRouter>
     <Routes>
       <Route path='/' element={<Home/>}/>
-      <Route path='Login' element={<Login/>}/>
+      <Route path='/Login' element={<Login/>}/>
     
-      <Route path='petList' element={<PetList/>}/>
+      <Route path='/PetList' element={<PetList/>}/>
       <Route path='/Login/recoverPassword' element={<Password/>}/>
       <Route path='/Login/newPassword' element={<NewPassword/>}/>
       <Route path='/Login/checked' element={<Checked/>}/>

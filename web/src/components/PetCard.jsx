@@ -1,13 +1,6 @@
 
-const CardPet =  ({img, nome, cidade, estado}) => {
-
-function saibaMais(){
-  // deve buscar as infos do pet, incluir isso no modal e abri-lo
-}
-
-function adotar(){
-
-}
+const CardPet = ({ pet, onSaibaMais, onAdotar }) => {
+  const { nome, urlImagem, cidade, estado } = pet;
 
   return (
     <li className="w-[244px] h-[330px] rounded-3xl bg-white 
@@ -15,7 +8,7 @@ function adotar(){
       {/**container da img ñ usa 'h-[210px] w-[195px] pt-[20px]' se img tiver tamanho ideal */}
        <div className="max-w-[80%] m-auto mb-3 h-[210px] w-[195px] pt-[20px]">
         {/*img usa apenas max-w-full block se imagens vierem no tamanho ideal */}
-            <img className="h-[200px] w-[195px] object-fill rounded-[10px]" src={img} alt={nome}></img>
+            <img className="h-[200px] w-[195px] object-fill rounded-[10px]" src={urlImagem} alt={nome}></img>
        </div>
 
        <div className="h-11 px-7 mb-3">
@@ -28,14 +21,14 @@ function adotar(){
               className="text-xs font-medium bg-accent text-white 
               font-poppins px-2 py-2 rounded-2xl shadow-[3px_4px_4px_0px_rgba(0,0,0,0.25)]
               cursor-pointer" 
-              onClick={saibaMais}>
+              onClick={() => onSaibaMais(pet)}>
                 Conheça +
             </button>
             <button 
               className="text-xs font-medium bg-secondary text-white
                font-poppins px-4 py-2 rounded-2xl shadow-[3px_4px_4px_0px_rgba(0,0,0,0.25)]
                cursor-pointer" 
-              onClick={adotar}>
+              onClick={() => onAdotar(pet)}>
                 Adotar +
             </button>
         </div>
