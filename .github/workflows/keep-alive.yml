@@ -1,0 +1,32 @@
+name: Manter Supabase ativo
+
+on:
+  schedule:
+    # Roda toda segunda e quinta às 12:00 UTC (09:00 no horário de Brasília)
+    - cron: "0 12 * * 1,4"
+  workflow_dispatch: {}
+  # workflow_dispatch permite rodar manualmente pela aba "Actions" do GitHub,
+  # útil pra testar sem esperar o agendamento.
+
+jobs:
+  ping-supabase:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fazer uma consulta simples no banco
+        run: |
+          http_status=$(curl -s -o /dev/null -w "%{http_code}" \
+            "${SUPABASE_URL}/rest/v1/ong?select=id&limit=1" \
+            -H "apikey: ${SUPABASE_ANON_KEY}" \
+            -H "Authorization: Bearer ${SUPABASE_ANON_KEY}")
+
+          echo "Resposta do Supabase: HTTP $http_status"
+
+          # Qualquer resposta (mesmo 401/403) já prova que o projeto respondeu
+          # e não está pausado. Só falha se não conseguir nem chegar no servidor.
+          if [ -z "$http_status" ] || [ "$http_status" = "000" ]; then
+            echo "Não foi possível alcançar o Supabase."
+            exit 1
+          fi
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
