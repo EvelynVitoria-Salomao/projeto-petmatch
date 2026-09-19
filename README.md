@@ -24,6 +24,8 @@ Sistema para adoção e cuidado animal, com API em Elysia/Bun e interface web em
 
 O PetMatch & Care conecta ONGs e adotantes, permitindo cadastro e consulta de pets para adoção.
 
+> **Status:** este projeto foi iniciado em equipe (veja [Autores](#autores)) e, após o grupo se dispersar, está sendo finalizado e mantido por [Evelyn Vitoria Salomão](https://github.com/EvelynVitoria-Salomao) como projeto de portfólio. O histórico de commits do time original foi mantido integralmente.
+
 ## Estrutura do repositório
 
 - `server`: API backend (Elysia + Bun + Drizzle + Better Auth)
@@ -67,7 +69,8 @@ O PetMatch & Care conecta ONGs e adotantes, permitindo cadastro e consulta de pe
 
 - Bun instalado
 - Node.js instalado
-- Docker e Docker Compose instalados
+- Uma instância PostgreSQL — local via Docker, **ou** um banco gratuito hospedado (ex: [Supabase](https://supabase.com), que também oferece armazenamento de imagens)
+- Docker e Docker Compose (só necessário se for usar a Opção A abaixo)
 
 ### 1. Clonar o repositório
 
@@ -76,36 +79,69 @@ git clone https://github.com/EvelynVitoria-Salomao/projeto-petmatch.git
 cd projeto-petmatch
 ```
 
-### 2. Ajustar variáveis de ambiente para criação do ambiente do docker
+### 2. Configurar variáveis de ambiente
+
 ```bash
 cp .env.example .env
 ```
 
-Verificar as variáveis de ambiente no arquivo `.env` e ajustá-las conforme necessário. No fluxo com **todos os serviços no Compose**, mantenha em `DATABASE_URL` o host **`database`** (nome do serviço no `docker-compose.yml`); `localhost` só funciona quando o backend roda na sua máquina e não dentro do container.
+As credenciais de exemplo no `.env.example` pertencem ao time original e não são válidas — cada pessoa rodando o projeto localmente precisa gerar as suas próprias:
 
-### 3. Subir todo o ambiente via docker compose
+- **Google OAuth** (`GOOGLE_CLIENT_ID`/`GOOGLE_CLIENT_SECRET`): crie um app OAuth no [Google Cloud Console](https://console.cloud.google.com/).
+- **Resend** (`RESEND_API_KEY`): crie uma conta gratuita em [resend.com](https://resend.com).
+- **Supabase** (`SUPABASE_URL`/`SUPABASE_KEY`/`SUPABASE_BUCKET`): crie um projeto gratuito em [supabase.com](https://supabase.com) e um bucket público (ex: `images`) em Storage.
+
+Se algum desses serviços não for usado agora (ex: só quer testar a listagem de pets), pode deixar um valor qualquer não vazio nessas variáveis — o servidor exige que existam, mas só falha de verdade se a funcionalidade correspondente for usada (login Google, envio de e-mail, upload de imagem).
+
+### Opção A — com Docker (todos os serviços num único ambiente)
+
+No fluxo com **todos os serviços no Compose**, mantenha em `DATABASE_URL` o host **`database`** (nome do serviço no `docker-compose.yml`); `localhost` só funciona quando o backend roda na sua máquina e não dentro do container.
 
 ```bash
 docker compose up -d
-```
-
-Backend disponível em `http://localhost:3000`.
-Frontend disponível em `http://localhost:5173`.
-
-### 4. Rodar migrations e seed via docker compose
-
-```bash
 docker compose exec server bun db:migrate
 docker compose exec server bun db:seed
 ```
 
-### 5. Parar os serviços
+Backend disponível em `http://localhost:3000`.
+Frontend disponível em `http://localhost:5173`.
 
 Para parar os serviços:
 
 ```bash
 docker compose down
 ```
+
+### Opção B — sem Docker (Bun local + banco hospedado)
+
+Útil se você não tem Docker/virtualização habilitada na máquina. Use um `DATABASE_URL` de um banco hospedado (ex: Supabase). **Atenção:** conexões diretas do Supabase (porta 5432, host `db.<ref>.supabase.co`) usam IPv6 por padrão e podem falhar em redes só-IPv4; use a connection string do **Session pooler** (Project Settings → Database → Connect) nesse caso.
+
+O Bun e o Vite só carregam o `.env` da própria pasta onde o comando é rodado — copie o arquivo `.env` também para dentro de `server/` e de `web/`:
+
+```bash
+cp .env server/.env
+cp .env web/.env
+```
+
+Depois, em dois terminais separados:
+
+```bash
+# terminal 1 — backend
+cd server
+bun install
+bun db:migrate
+bun db:seed
+bun dev
+```
+
+```bash
+# terminal 2 — frontend
+cd web
+npm install
+npm run dev
+```
+
+Acesse sempre por `http://localhost:5173` (não pelo endereço de rede tipo `192.168.x.x` que o Vite também exibe — o backend só aceita requisições vindas de `localhost`).
 
 ## Endpoints principais
 
@@ -127,10 +163,10 @@ docker compose down
 ## Roadmap
 
 - [ ] Cadastro e autenticação completos no frontend
-- [ ] Tela de detalhes de pet com contato rápido da ONG
-- [ ] Filtros avançados por cidade/porte/espécie
+- [x] Tela de detalhes de pet com contato rápido da ONG
+- [x] Filtros avançados por cidade/porte/espécie
 - [ ] Dashboard administrativo para ONGs
-- [ ] Testes automatizados para fluxos principais
+- [ ] Testes automatizados para fluxos principais (frontend)
 
 ## Padrão de commits
 
